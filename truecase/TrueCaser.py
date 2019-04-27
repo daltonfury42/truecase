@@ -1,12 +1,13 @@
 import pickle
-
+import os
 import math
 import nltk
+import string
 
 
 class TrueCaser(object):
     def __init__(self, dist_file_path):
-        with open('english_distributions.obj', 'rb') as distributions_file:
+        with open(dist_file_path, 'rb') as distributions_file:
             pickle_dict = pickle.load(distributions_file)
             self.uni_dist = pickle_dict['uni_dist']
             self.backward_bi_dist = pickle_dict['backward_bi_dist']
@@ -76,9 +77,10 @@ class TrueCaser(object):
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
 
-            if token in nltk.string.punctuation or token.isdigit():
+            if token in string.punctuation or token.isdigit():
                 tokens_true_case.append(token)
             else:
+                token = token.lower()
                 if token in self.word_casing_lookup:
                     if len(self.word_casing_lookup[token]) == 1:
                         tokens_true_case.append(list(self.word_casing_lookup[token])[0])
@@ -111,3 +113,11 @@ class TrueCaser(object):
 
         return tokens_true_case
 
+if __name__ == '__main__':
+    dist_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/english.dist')
+
+    caser = TrueCaser(dist_file_path)
+
+    while True:
+        ip = input('Enter a sentence: ')
+        print(caser.get_true_case(ip, 'title'))

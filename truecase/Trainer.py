@@ -21,7 +21,6 @@ class Trainer(object):
 
         self.init()
 
-        # :: Create unigram lookup ::
         for sentence in corpus:
             if not self.check_sentence_sanity(sentence):
                 continue
@@ -108,6 +107,7 @@ if __name__ == '__main__':
              + nltk.corpus.semcor.sents() \
              + nltk.corpus.conll2000.sents() \
              + nltk.corpus.state_union.sents()
+
 
     trainer = Trainer()
     trainer.train(corpus)
