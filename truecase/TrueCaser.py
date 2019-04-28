@@ -5,8 +5,10 @@ import nltk
 import string
 
 
+
 class TrueCaser(object):
     def __init__(self, dist_file_path):
+
         with open(dist_file_path, 'rb') as distributions_file:
             pickle_dict = pickle.load(distributions_file)
             self.uni_dist = pickle_dict['uni_dist']
@@ -111,7 +113,10 @@ class TrueCaser(object):
                     else:
                         tokens_true_case.append(token)
 
-        return tokens_true_case
+        return "".join(
+            [" "+i if not i.startswith("'") and i not in string.punctuation else i for i in tokens_true_case]
+        ).strip()
+
 
 if __name__ == '__main__':
     dist_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/english.dist')
