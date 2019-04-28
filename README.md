@@ -26,8 +26,12 @@ pip install truecaser
 
 ## Usage
 
+
 TODO
 
+## Training your own model
+
+TODO
 
 ## Contributing
 
