@@ -26,17 +26,20 @@ pip install truecaser
 
 ## Usage
 
-
-TODO
+Simple usecase:
+```
+>>> import truecase
+>>> truecase.get_true_case('hey, what is the weather in new york?')
+'Hey, what is the weather in New York?''
+```
 
 ## Training your own model
 
-TODO
+TODO. For now refer to Trainer.py
 
 ## Contributing
 
-TODO
-
+I see a lot of space for improvement. Feel free to fork and improve. Do sent a pull request.
 
 ## Authors
 

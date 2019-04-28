@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="truecase",
-    version="0.0.2",
+    version="0.0.4",
     author="Dalton Fury",
     author_email="daltonfury42@disroot.org",
     description="A library to restore capitalization for text",
