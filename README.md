@@ -21,7 +21,7 @@ The project uses NLTK. Find install instructions [here](https://www.nltk.org/ins
 
 
 ```
-pip install truecaser
+pip install truecase
 ```
 
 ## Usage
