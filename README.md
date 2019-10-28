@@ -13,21 +13,21 @@ the best results (e.g. on a recent dump of Wikipedia).
 
 ### Prerequisites
 
-Python 3
+- Python 3
 
 The project uses NLTK. Find install instructions [here](https://www.nltk.org/install.html).
 
 ### Installing
 
-
-```
+```bash
 pip install truecase
 ```
 
 ## Usage
 
 Simple usecase:
-```
+
+```python
 >>> import truecase
 >>> truecase.get_true_case('hey, what is the weather in new york?')
 'Hey, what is the weather in New York?''
