@@ -74,7 +74,8 @@ class Trainer(object):
 
         print('Model saved to ' + file_path)
 
-    def get_casing(self, word):
+    @staticmethod
+    def get_casing(word):
         """ Returns the casing of a word """
         if len(word) == 0:
             return 'other'
