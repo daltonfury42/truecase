@@ -3,15 +3,8 @@ import pickle
 import nltk
 
 
-class Trainer(object):
+class Trainer:
     def __init__(self):
-        self.uni_dist = None
-        self.backward_bi_dist = None
-        self.forward_bi_dist = None
-        self.trigram_dist = None
-        self.word_casing_lookup = None
-
-    def init(self):
         self.uni_dist = nltk.FreqDist()
         self.backward_bi_dist = nltk.FreqDist()
         self.forward_bi_dist = nltk.FreqDist()
@@ -19,9 +12,6 @@ class Trainer(object):
         self.word_casing_lookup = {}
 
     def train(self, corpus):
-
-        self.init()
-
         for sentence in corpus:
             if not self.check_sentence_sanity(sentence):
                 continue
