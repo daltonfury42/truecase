@@ -69,8 +69,8 @@ class TrueCaser(object):
         return result
 
     def get_true_case(self, sentence, out_of_vocabulary_token_option='title'):
-        """
-        Returns the true case for the passed tokens.
+        """ Returns the true case for the passed tokens.
+
         @param tokens: Tokens in a single sentence
         @param outOfVocabulariyTokenOption:
             title: Returns out of vocabulary (OOV) tokens in 'title' format
