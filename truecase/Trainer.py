@@ -75,7 +75,7 @@ class Trainer(object):
         print('Model saved to ' + file_path)
 
     def get_casing(self, word):
-        """ Returns the casing of a word"""
+        """ Returns the casing of a word """
         if len(word) == 0:
             return 'other'
         elif word.isdigit():  # Is a digit
@@ -90,7 +90,7 @@ class Trainer(object):
         return 'other'
 
     def check_sentence_sanity(self, sentence):
-        """ Checks the sanity of the sentence. If the sentence is for example all uppercase, it is recjected"""
+        """ Checks the sanity of the sentence. If the sentence is for example all uppercase, it is recjected """
         case_dist = nltk.FreqDist()
 
         for token in sentence:
