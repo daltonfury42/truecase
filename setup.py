@@ -12,7 +12,9 @@ sys.path.insert(0, src_dir)
 
 def get_requirements(requirements_path: str = "requirements.txt"):
     with open(requirements_path) as fp:
-        return [x.strip() for x in fp.read().split("\n") if not x.startswith("#")]
+        return [
+            x.strip() for x in fp.read().split("\n") if not x.startswith("#")
+        ]
 
 
 setuptools.setup(

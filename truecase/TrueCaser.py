@@ -11,8 +11,8 @@ class TrueCaser(object):
         """ Initialize module with default data/english.dist file """
         if dist_file_path is None:
             dist_file_path = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)), "data/english.dist"
-            )
+                os.path.dirname(os.path.abspath(__file__)),
+                "data/english.dist")
 
         with open(dist_file_path, "rb") as distributions_file:
             pickle_dict = pickle.load(distributions_file)
@@ -28,7 +28,8 @@ class TrueCaser(object):
         # Get Unigram Score
         nominator = self.uni_dist[possible_token] + pseudo_count
         denominator = 0
-        for alternativeToken in self.word_casing_lookup[possible_token.lower()]:
+        for alternativeToken in self.word_casing_lookup[
+                possible_token.lower()]:
             denominator += self.uni_dist[alternativeToken] + pseudo_count
 
         unigram_score = nominator / denominator
@@ -37,14 +38,14 @@ class TrueCaser(object):
         bigram_backward_score = 1
         if prev_token is not None:
             nominator = (
-                self.backward_bi_dist[prev_token + "_" + possible_token] + pseudo_count
-            )
+                self.backward_bi_dist[prev_token + "_" + possible_token] +
+                pseudo_count)
             denominator = 0
-            for alternativeToken in self.word_casing_lookup[possible_token.lower()]:
-                denominator += (
-                    self.backward_bi_dist[prev_token + "_" + alternativeToken]
-                    + pseudo_count
-                )
+            for alternativeToken in self.word_casing_lookup[
+                    possible_token.lower()]:
+                denominator += (self.backward_bi_dist[prev_token + "_" +
+                                                      alternativeToken] +
+                                pseudo_count)
 
             bigram_backward_score = nominator / denominator
 
@@ -53,14 +54,14 @@ class TrueCaser(object):
         if next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
             nominator = (
-                self.forward_bi_dist[possible_token + "_" + next_token] + pseudo_count
-            )
+                self.forward_bi_dist[possible_token + "_" + next_token] +
+                pseudo_count)
             denominator = 0
-            for alternativeToken in self.word_casing_lookup[possible_token.lower()]:
+            for alternativeToken in self.word_casing_lookup[
+                    possible_token.lower()]:
                 denominator += (
-                    self.forward_bi_dist[alternativeToken + "_" + next_token]
-                    + pseudo_count
-                )
+                    self.forward_bi_dist[alternativeToken + "_" + next_token] +
+                    pseudo_count)
 
             bigram_forward_score = nominator / denominator
 
@@ -68,27 +69,19 @@ class TrueCaser(object):
         trigram_score = 1
         if prev_token is not None and next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
-            nominator = (
-                self.trigram_dist[prev_token + "_" + possible_token + "_" + next_token]
-                + pseudo_count
-            )
+            nominator = (self.trigram_dist[prev_token + "_" + possible_token +
+                                           "_" + next_token] + pseudo_count)
             denominator = 0
-            for alternativeToken in self.word_casing_lookup[possible_token.lower()]:
+            for alternativeToken in self.word_casing_lookup[
+                    possible_token.lower()]:
                 denominator += (
-                    self.trigram_dist[
-                        prev_token + "_" + alternativeToken + "_" + next_token
-                    ]
-                    + pseudo_count
-                )
+                    self.trigram_dist[prev_token + "_" + alternativeToken +
+                                      "_" + next_token] + pseudo_count)
 
             trigram_score = nominator / denominator
 
-        result = (
-            math.log(unigram_score)
-            + math.log(bigram_backward_score)
-            + math.log(bigram_forward_score)
-            + math.log(trigram_score)
-        )
+        result = (math.log(unigram_score) + math.log(bigram_backward_score) +
+                  math.log(bigram_forward_score) + math.log(trigram_score))
 
         return result
 
@@ -112,24 +105,20 @@ class TrueCaser(object):
                 token = token.lower()
                 if token in self.word_casing_lookup:
                     if len(self.word_casing_lookup[token]) == 1:
-                        tokens_true_case.append(list(self.word_casing_lookup[token])[0])
+                        tokens_true_case.append(
+                            list(self.word_casing_lookup[token])[0])
                     else:
-                        prev_token = (
-                            tokens_true_case[token_idx - 1] if token_idx > 0 else None
-                        )
-                        next_token = (
-                            tokens[token_idx + 1]
-                            if token_idx < len(tokens) - 1
-                            else None
-                        )
+                        prev_token = (tokens_true_case[token_idx - 1]
+                                      if token_idx > 0 else None)
+                        next_token = (tokens[token_idx + 1]
+                                      if token_idx < len(tokens) - 1 else None)
 
                         best_token = None
                         highest_score = float("-inf")
 
                         for possible_token in self.word_casing_lookup[token]:
-                            score = self.get_score(
-                                prev_token, possible_token, next_token
-                            )
+                            score = self.get_score(prev_token, possible_token,
+                                                   next_token)
 
                             if score > highest_score:
                                 best_token = possible_token
@@ -148,18 +137,16 @@ class TrueCaser(object):
                     else:
                         tokens_true_case.append(token)
 
-        return "".join(
-            [
-                " " + i if not i.startswith("'") and i not in string.punctuation else i
-                for i in tokens_true_case
-            ]
-        ).strip()
+        return "".join([
+            " " +
+            i if not i.startswith("'") and i not in string.punctuation else i
+            for i in tokens_true_case
+        ]).strip()
 
 
 if __name__ == "__main__":
-    dist_file_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "data/english.dist"
-    )
+    dist_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                  "data/english.dist")
 
     caser = TrueCaser(dist_file_path)
 
