@@ -5,40 +5,39 @@ from truecase import Trainer
 
 
 class TestTrainer(unittest.TestCase):
-
     def setUp(self):
         self.tc = Trainer.Trainer()
 
     def test_get_casing(self):
-        word = ''
+        word = ""
         result = self.tc.get_casing(word)
 
-        assert result == 'other'
+        assert result == "other"
 
-        word = '1'
+        word = "1"
         result = self.tc.get_casing(word)
 
-        assert result == 'numeric'
+        assert result == "numeric"
 
-        word = 'low_word'
+        word = "low_word"
         result = self.tc.get_casing(word)
 
-        assert result == 'allLower'
+        assert result == "allLower"
 
-        word = 'ALL_UPPER'
+        word = "ALL_UPPER"
         result = self.tc.get_casing(word)
 
-        assert result == 'allUpper'
+        assert result == "allUpper"
 
-        word = 'Initial'
+        word = "Initial"
         result = self.tc.get_casing(word)
 
-        assert result == 'initialUpper'
+        assert result == "initialUpper"
 
-        word = '_.,:;'
+        word = "_.,:;"
         result = self.tc.get_casing(word)
 
-        assert result == 'other'
+        assert result == "other"
 
     def test_check_sentence_sanity(self):
         sentence = "TO BE REJECTED"

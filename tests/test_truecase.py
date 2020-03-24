@@ -5,7 +5,6 @@ import truecase
 
 
 class TestTrueCase(unittest.TestCase):
-
     def setUp(self):
         self.tc = truecase.TrueCaser()
 
