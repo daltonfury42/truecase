@@ -13,8 +13,10 @@ class Trainer:
 
     def __function_one(self, sentence, word, word_idx, word_lower):
         try:
-            if (word_lower in self.word_casing_lookup
-                    and len(self.word_casing_lookup[word_lower]) >= 2):
+            if (
+                word_lower in self.word_casing_lookup
+                and len(self.word_casing_lookup[word_lower]) >= 2
+            ):
                 # Only if there are multiple options
                 prev_word = sentence[word_idx - 1]
 
@@ -35,11 +37,14 @@ class Trainer:
             cur_word_lower = word.lower()
             next_word_lower = sentence[word_idx + 1].lower()
 
-            if (cur_word_lower in self.word_casing_lookup and
-                    len(self.word_casing_lookup[cur_word_lower]) >= 2):
+            if (
+                cur_word_lower in self.word_casing_lookup
+                and len(self.word_casing_lookup[cur_word_lower]) >= 2
+            ):
                 # Only if there are multiple options
-                self.trigram_dist[prev_word + "_" + cur_word + "_" +
-                                  next_word_lower] += 1
+                self.trigram_dist[
+                    prev_word + "_" + cur_word + "_" + next_word_lower
+                ] += 1
         except IndexError:
             pass
 
@@ -105,9 +110,13 @@ class Trainer:
 
 
 if __name__ == "__main__":
-    corpus = (nltk.corpus.brown.sents() + nltk.corpus.reuters.sents() +
-              nltk.corpus.semcor.sents() + nltk.corpus.conll2000.sents() +
-              nltk.corpus.state_union.sents())
+    corpus = (
+        nltk.corpus.brown.sents()
+        + nltk.corpus.reuters.sents()
+        + nltk.corpus.semcor.sents()
+        + nltk.corpus.conll2000.sents()
+        + nltk.corpus.state_union.sents()
+    )
 
     trainer = Trainer()
     trainer.train(corpus)

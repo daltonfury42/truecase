@@ -12,5 +12,5 @@ def get_truecaser():
 
 def get_true_case(sentence, out_of_vocabulary_token_option="title"):
     return get_truecaser().get_true_case(
-        sentence,
-        out_of_vocabulary_token_option=out_of_vocabulary_token_option)
+        sentence, out_of_vocabulary_token_option=out_of_vocabulary_token_option
+    )
