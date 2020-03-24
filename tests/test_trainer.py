@@ -1,4 +1,3 @@
-import os
 import unittest
 
 from truecase import Trainer
@@ -43,7 +42,7 @@ class TestTrainer(unittest.TestCase):
         sentence = "TO BE REJECTED"
         result = self.tc.check_sentence_sanity(sentence)
 
-        assert result == False
+        assert not result
 
         sentence = "to be accepted"
         result = self.tc.check_sentence_sanity(sentence)

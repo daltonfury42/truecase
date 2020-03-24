@@ -11,6 +11,38 @@ class Trainer:
         self.trigram_dist = nltk.FreqDist()
         self.word_casing_lookup = {}
 
+    def __function_one(self, sentence, word, word_idx, word_lower):
+        try:
+            if (word_lower in self.word_casing_lookup
+                    and len(self.word_casing_lookup[word_lower]) >= 2):
+                # Only if there are multiple options
+                prev_word = sentence[word_idx - 1]
+
+                self.backward_bi_dist[prev_word + "_" + word] += 1
+
+                next_word = sentence[word_idx + 1].lower()
+                self.forward_bi_dist[word + "_" + next_word] += 1
+        except IndexError:
+            pass
+
+    def __function_two(self, sentence, word, word_idx):
+        try:
+            if word_idx - 1 < 0:
+                return
+
+            prev_word = sentence[word_idx - 1]
+            cur_word = sentence[word_idx]
+            cur_word_lower = word.lower()
+            next_word_lower = sentence[word_idx + 1].lower()
+
+            if (cur_word_lower in self.word_casing_lookup and
+                    len(self.word_casing_lookup[cur_word_lower]) >= 2):
+                # Only if there are multiple options
+                self.trigram_dist[prev_word + "_" + cur_word + "_" +
+                                  next_word_lower] += 1
+        except IndexError:
+            pass
+
     def train(self, corpus):
         for sentence in corpus:
             if not self.check_sentence_sanity(sentence):
@@ -24,35 +56,8 @@ class Trainer:
 
                 self.word_casing_lookup[word_lower].add(word)
 
-                try:
-                    if (word_lower in self.word_casing_lookup
-                            and len(self.word_casing_lookup[word_lower]) >= 2):
-                        # Only if there are multiple options
-                        prev_word = sentence[word_idx - 1]
-
-                        self.backward_bi_dist[prev_word + "_" + word] += 1
-
-                        next_word = sentence[word_idx + 1].lower()
-                        self.forward_bi_dist[word + "_" + next_word] += 1
-                except IndexError:
-                    pass
-
-                try:
-                    if word_idx - 1 < 0:
-                        continue
-
-                    prev_word = sentence[word_idx - 1]
-                    cur_word = sentence[word_idx]
-                    cur_word_lower = word.lower()
-                    next_word_lower = sentence[word_idx + 1].lower()
-
-                    if (cur_word_lower in self.word_casing_lookup and
-                            len(self.word_casing_lookup[cur_word_lower]) >= 2):
-                        # Only if there are multiple options
-                        self.trigram_dist[prev_word + "_" + cur_word + "_" +
-                                          next_word_lower] += 1
-                except IndexError:
-                    pass
+                self.__function_one(sentence, word, word_idx, word_lower)
+                self.__function_two(sentence, word, word_idx)
 
     def save_to_file(self, file_path):
         pickle_dict = {
