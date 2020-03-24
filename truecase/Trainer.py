@@ -86,7 +86,8 @@ class Trainer:
         return "other"
 
     def check_sentence_sanity(self, sentence):
-        """ Checks the sanity of the sentence. If the sentence is for example all uppercase, it is recjected """
+        """ Checks the sanity of the sentence.
+        If the sentence is for example all uppercase, it is rejected """
         case_dist = nltk.FreqDist()
 
         for token in sentence:

@@ -17,8 +17,8 @@ class TestTrueCase(unittest.TestCase):
 
         assert result == expected
 
-        sentence = "My name is david gomez"
-        expected = "My name is David Gomez"
+        sentence = "My name is irvine wels"
+        expected = "My name is Irvine Wels"
 
         result = self.tc.get_true_case(sentence)
 

@@ -67,7 +67,7 @@ class TrueCaser(object):
 
         # Get Trigram Score
         trigram_score = 1
-        if prev_token is not None and next_token != None:
+        if prev_token is not None and next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
             nominator = (self.trigram_dist[prev_token + "_" + possible_token +
                                            "_" + next_token] + pseudo_count)

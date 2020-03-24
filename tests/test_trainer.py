@@ -39,3 +39,24 @@ class TestTrainer(unittest.TestCase):
         result = self.tc.get_casing(word)
 
         assert result == 'other'
+
+    def test_check_sentence_sanity(self):
+        sentence = "TO BE REJECTED"
+        result = self.tc.check_sentence_sanity(sentence)
+
+        assert result == False
+
+        sentence = "to be accepted"
+        result = self.tc.check_sentence_sanity(sentence)
+
+        assert result
+
+        sentence = "I live in Barcelona not Chicago nor New York"
+        result = self.tc.check_sentence_sanity(sentence)
+
+        assert result
+
+        sentence = "ALERT this is a warning"
+        result = self.tc.check_sentence_sanity(sentence)
+
+        assert result
