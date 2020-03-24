@@ -8,7 +8,7 @@ import string
 
 class TrueCaser(object):
     def __init__(self, dist_file_path=None):
-
+        """ Initialize module with default data/english.dist file """
         if dist_file_path is None:
             dist_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'data/english.dist')
 
