@@ -1,5 +1,7 @@
 # TrueCase
 
+![Python tests](https://github.com/sergialonsaco/truecase/workflows/Main/badge.svg)
+
 A language independent, statistical, language modeling
 based tool in Python that restores case information for text.
 
