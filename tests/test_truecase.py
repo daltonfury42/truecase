@@ -21,3 +21,11 @@ class TestTrueCase(unittest.TestCase):
         result = self.tc.get_true_case(sentence)
 
         assert result == expected
+
+    def test_fix_upper_contractions(self):
+        sentence = "isn'T"
+        expected = "isn't"
+
+        result = self.tc._fix_upper_contractions(sentence)
+
+        assert result == expected

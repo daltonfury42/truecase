@@ -39,4 +39,3 @@ jobs:
       - name: Test with pytest
         run: |
           py.test -v --cov truecase --cov-fail-under 50 --cov-config tests/.coveragerc
-          # py.test . -v

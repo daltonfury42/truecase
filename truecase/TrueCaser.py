@@ -87,6 +87,20 @@ class TrueCaser(object):
 
         return result
 
+    def _fix_upper_contractions(self, sentence):
+        fix_sentence = list(sentence)
+        previous_char = ''
+        for idx, char in enumerate(fix_sentence):
+            if char.isupper() and previous_char is "'":
+                fix_sentence[idx] = char.lower()
+            previous_char = char
+
+        return "".join(fix_sentence)
+
+    def _fix_symbol_relocations(self, sentence):
+        # TODO
+        return sentence
+
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
         """ Returns the true case for the passed tokens.
 
@@ -139,11 +153,15 @@ class TrueCaser(object):
                     else:
                         tokens_true_case.append(token)
 
-        return "".join([
+        true_case_sentence = "".join([
             " " +
             i if not i.startswith("'") and i not in string.punctuation else i
             for i in tokens_true_case
         ]).strip()
+
+        true_case_sentence = self._fix_upper_contractions(true_case_sentence)
+
+        return true_case_sentence
 
 
 if __name__ == "__main__":
@@ -154,4 +172,4 @@ if __name__ == "__main__":
 
     while True:
         ip = input("Enter a sentence: ")
-        print(caser.get_true_case(ip, "lower"))
+        print(caser.get_true_case(ip, "title"))
