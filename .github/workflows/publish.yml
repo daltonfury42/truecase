@@ -1,9 +1,11 @@
-# This workflows will publish the package to PyPI. Uploading packages only on a tagged commit. For more information, see https://github.com/pypa/gh-action-pypi-publish
+# This workflows will publish the package to PyPI. For more information, see https://github.com/pypa/gh-action-pypi-publish
 
 
-name: Publish Python distributions to PyPI
+name: Publish PyPI
 
-on: push
+on:
+  release:
+    types: published
 
 jobs:
   build-n-publish:
@@ -25,7 +27,6 @@ jobs:
     - name: Build a binary wheel and a source tarball
       run: python setup.py sdist bdist_wheel
     - name: Publish distribution to PyPI
-      if: startsWith(github.event.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.pypi_password }}
