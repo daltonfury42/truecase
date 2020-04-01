@@ -2,7 +2,7 @@ from functools import lru_cache
 
 from .TrueCaser import TrueCaser
 
-__version__ = "0.4.1"
+__version__ = "0.0.8"
 
 
 @lru_cache(maxsize=1)
