@@ -96,54 +96,54 @@ class TrueCaser(object):
             lower: Returns OOV tokens in lower case
             as-is: Returns OOV tokens as is
         """
-        tokens = self.tknzr.tokenize(sentence)
+        tokens = [t for t in sentence.split() if t != '']
 
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
+            token_subs = nltk.word_tokenize(token)
+            sub_true_case = []
 
-            if token in string.punctuation or token.isdigit():
-                tokens_true_case.append(token)
-            else:
-                token = token.lower()
-                if token in self.word_casing_lookup:
-                    if len(self.word_casing_lookup[token]) == 1:
-                        tokens_true_case.append(
-                            list(self.word_casing_lookup[token])[0])
-                    else:
-                        prev_token = (tokens_true_case[token_idx - 1]
-                                      if token_idx > 0 else None)
-                        next_token = (tokens[token_idx + 1]
-                                      if token_idx < len(tokens) - 1 else None)
+            for token_sub in token_subs:
+                if token_sub in string.punctuation or token_sub.isdigit():
+                    sub_true_case.append(token_sub)
+                else:
+                    token_sub = token_sub.lower()
+                    if token_sub in self.word_casing_lookup:
+                        if len(self.word_casing_lookup[token_sub]) == 1:
+                            sub_true_case.append(
+                                list(self.word_casing_lookup[token_sub])[0])
+                        else:
+                            prev_token = (tokens[token_idx - 1]
+                                        if token_idx > 0 else None)
+                            next_token = (tokens[token_idx + 1]
+                                        if token_idx < len(tokens) - 1 else None)
 
-                        best_token = None
-                        highest_score = float("-inf")
+                            best_token = None
+                            highest_score = float("-inf")
 
-                        for possible_token in self.word_casing_lookup[token]:
-                            score = self.get_score(prev_token, possible_token,
-                                                   next_token)
+                            for possible_token in self.word_casing_lookup[token_sub]:
+                                score = self.get_score(prev_token, possible_token,
+                                                    next_token)
 
-                            if score > highest_score:
-                                best_token = possible_token
-                                highest_score = score
+                                if score > highest_score:
+                                    best_token = possible_token
+                                    highest_score = score
 
-                        tokens_true_case.append(best_token)
+                            sub_true_case.append(best_token)
 
-                    if token_idx == 0:
-                        tokens_true_case[0] = tokens_true_case[0].title()
+                        if token_idx == 0:
+                            sub_true_case[0] = sub_true_case[0].title()
 
-                else:  # Token out of vocabulary
-                    if out_of_vocabulary_token_option == "title":
-                        tokens_true_case.append(token.title())
-                    elif out_of_vocabulary_token_option == "lower":
-                        tokens_true_case.append(token.lower())
-                    else:
-                        tokens_true_case.append(token)
+                    else:  # Token out of vocabulary
+                        if out_of_vocabulary_token_option == "title":
+                            sub_true_case.append(token_sub.title())
+                        elif out_of_vocabulary_token_option == "lower":
+                            sub_true_case.append(token_sub.lower())
+                        else:
+                            sub_true_case.append(token_sub)
+            tokens_true_case.append("".join(sub_true_case))
 
-        return "".join([
-            " " +
-            i if not i.startswith("'") and i not in string.punctuation else i
-            for i in tokens_true_case
-        ]).strip()
+        return " ".join(tokens_true_case).strip()
 
 
 if __name__ == "__main__":
