@@ -1,6 +1,7 @@
 # TrueCase
 
-![Main](https://github.com/sergialonsaco/truecase/workflows/Main/badge.svg?branch=master)
+
+![Main](https://github.com/daltonfury42/truecase/workflows/Main/badge.svg) ![Publish PyPI](https://github.com/daltonfury42/truecase/workflows/Publish%20Python%20distributions%20to%20PyPI/badge.svg)
 
 A language independent, statistical, language modeling
 based tool in Python that restores case information for text.
