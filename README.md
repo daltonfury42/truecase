@@ -23,7 +23,7 @@ The project uses NLTK. Find install instructions [here](https://www.nltk.org/ins
 ### Installing
 
 ```bash
-pip install truecase
+pip3 install truecase
 ```
 
 ## Usage
