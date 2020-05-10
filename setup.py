@@ -34,6 +34,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    license='MIT',
     install_requires=get_requirements(),
     include_package_data=True,
 )
