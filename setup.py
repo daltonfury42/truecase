@@ -21,7 +21,7 @@ setuptools.setup(
     name="truecase",
     version=truecase.__version__,
     author="Dalton Fury",
-    author_email="daltonfury42 <at> disroot <dot> org",
+    author_email="daltonfury42@disroot.org",
     description="A library to restore capitalization for text",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
