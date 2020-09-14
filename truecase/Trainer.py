@@ -43,12 +43,12 @@ class Trainer:
         except IndexError:
             pass
 
-    def train(self, corpus):
+    def get_unigram_casing_stats(self, corpus):
         for sentence in corpus:
             if not self.check_sentence_sanity(sentence):
                 continue
 
-            for word_idx, word in enumerate(sentence):
+            for _, word in enumerate(sentence):
                 self.uni_dist[word] += 1
                 word_lower = word.lower()
                 if word_lower not in self.word_casing_lookup:
@@ -56,6 +56,17 @@ class Trainer:
 
                 self.word_casing_lookup[word_lower].add(word)
 
+    def train(self, corpus):
+        # first pass to get unigram and casing statistics
+        self.get_unigram_casing_stats(corpus)
+
+        # second pass to get bi-gram tri-gram statistics
+        for sentence in corpus:
+            if not self.check_sentence_sanity(sentence):
+                continue
+
+            for word_idx, word in enumerate(sentence):
+                word_lower = word.lower()
                 self.__function_one(sentence, word, word_idx, word_lower)
                 self.__function_two(sentence, word, word_idx)
 
