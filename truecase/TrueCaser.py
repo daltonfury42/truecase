@@ -87,6 +87,9 @@ class TrueCaser(object):
 
         return result
 
+    def first_token_case(self, raw):
+        return f'{raw[0].upper()}{raw[1:]}'
+
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
         """ Returns the true case for the passed tokens.
 
@@ -129,7 +132,7 @@ class TrueCaser(object):
                         tokens_true_case.append(best_token)
 
                     if token_idx == 0:
-                        tokens_true_case[0] = tokens_true_case[0].title()
+                        tokens_true_case[0] = self.first_token_case(tokens_true_case[0])
 
                 else:  # Token out of vocabulary
                     if out_of_vocabulary_token_option == "title":
