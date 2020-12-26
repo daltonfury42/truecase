@@ -90,7 +90,7 @@ class TrueCaser(object):
     def first_token_case(self, raw):
         return f'{raw[0].upper()}{raw[1:]}'
 
-    def get_true_case(self, sentence, pretokenised=False, out_of_vocabulary_token_option="title"):
+    def get_true_case(self, sentence, pretok=False, out_of_vocabulary_token_option="title"):
         """ Returns the true case for the passed tokens.
     
         @param tokens: Tokens in a single sentence
@@ -100,8 +100,8 @@ class TrueCaser(object):
             lower: Returns OOV tokens in lower case
             as-is: Returns OOV tokens as is
         """
-        if pretokenised:
-           tokens = sentence.split()
+        if pretok:
+            tokens = sentence.split()
         else:
             tokens = self.tknzr.tokenize(sentence)
 
@@ -146,7 +146,7 @@ class TrueCaser(object):
                     else:
                         tokens_true_case.append(token)
 
-        if pretokenised:
+        if pretok:
             result = ' '.join(tokens_true_case).strip()
         else:
             result = "".join([" " + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens_true_case]).strip()
