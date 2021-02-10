@@ -90,21 +90,34 @@ class TrueCaser(object):
     def first_token_case(self, raw):
         return f'{raw[0].upper()}{raw[1:]}'
 
-    def get_true_case(self, sentence, pretok=False, out_of_vocabulary_token_option="title"):
-        """ Returns the true case for the passed tokens.
-    
-        @param tokens: Tokens in a single sentence
-        @param pretokenised: set to true if input is alreay tokenised (e.g. string with whitespace between tokens)
-        @param outOfVocabulariyTokenOption:
+    def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
+        """ Wrapper function for handling untokenized input.
+        
+        @param sentence: a sentence string to be tokenized
+        @param outOfVocabularyTokenOption:
             title: Returns out of vocabulary (OOV) tokens in 'title' format
             lower: Returns OOV tokens in lower case
             as-is: Returns OOV tokens as is
+    
+        Returns (str): detokenized, truecased version of input sentence 
         """
-        if pretok:
-            tokens = sentence.split()
-        else:
-            tokens = self.tknzr.tokenize(sentence)
-
+        tokens = self.tknzr.tokenize(sentence)
+        tokens_true_case = self.get_true_case_from_tokens(tokens, out_of_vocabulary_token_option)
+        return "".join([" " + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens_true_case]).strip()
+        
+    def get_true_case_from_tokens(self, tokens, out_of_vocabulary_token_option="title"):
+        """ Returns the true case for the passed tokens.
+    
+        @param tokens: List of tokens in a single sentence
+        @param pretokenised: set to true if input is alreay tokenised (e.g. string with whitespace between tokens)
+        @param outOfVocabularyTokenOption:
+            title: Returns out of vocabulary (OOV) tokens in 'title' format
+            lower: Returns OOV tokens in lower case
+            as-is: Returns OOV tokens as is
+        
+        Returns (list[str]): truecased version of input list
+        of tokens 
+        """
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
 
@@ -145,13 +158,8 @@ class TrueCaser(object):
                         tokens_true_case.append(token.lower())
                     else:
                         tokens_true_case.append(token)
-
-        if pretok:
-            result = ' '.join(tokens_true_case).strip()
-        else:
-            result = "".join([" " + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens_true_case]).strip()
-
-        return result
+        
+        return tokens_true_case
 
 
 if __name__ == "__main__":
