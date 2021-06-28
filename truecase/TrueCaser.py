@@ -4,7 +4,8 @@ import pickle
 import string
 
 import nltk
-from nltk.tokenize import TweetTokenizer
+from nltk.tokenize import word_tokenize
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 
 class TrueCaser(object):
@@ -22,7 +23,7 @@ class TrueCaser(object):
             self.forward_bi_dist = pickle_dict["forward_bi_dist"]
             self.trigram_dist = pickle_dict["trigram_dist"]
             self.word_casing_lookup = pickle_dict["word_casing_lookup"]
-        self.tknzr = TweetTokenizer()
+        self.detknzr = TreebankWordDetokenizer()
 
     def get_score(self, prev_token, possible_token, next_token):
         pseudo_count = 5.0
@@ -99,7 +100,7 @@ class TrueCaser(object):
             lower: Returns OOV tokens in lower case
             as-is: Returns OOV tokens as is
         """
-        tokens = self.tknzr.tokenize(sentence)
+        tokens = word_tokenize(sentence)
 
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
@@ -145,11 +146,7 @@ class TrueCaser(object):
                     else:
                         tokens_true_case.append(token)
 
-        return "".join([
-            " " +
-            i if not i.startswith("'") and i not in string.punctuation else i
-            for i in tokens_true_case
-        ]).strip()
+        return self.detknzr.detokenize(tokens_true_case)
 
 
 if __name__ == "__main__":
