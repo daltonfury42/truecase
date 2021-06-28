@@ -28,18 +28,18 @@ class TrueCaser(object):
         pseudo_count = 5.0
 
         # Get Unigram Score
-        nominator = self.uni_dist[possible_token] + pseudo_count
+        numerator = self.uni_dist[possible_token] + pseudo_count
         denominator = 0
         for alternativeToken in self.word_casing_lookup[
                 possible_token.lower()]:
             denominator += self.uni_dist[alternativeToken] + pseudo_count
 
-        unigram_score = nominator / denominator
+        unigram_score = numerator / denominator
 
         # Get Backward Score
         bigram_backward_score = 1
         if prev_token is not None:
-            nominator = (
+            numerator = (
                 self.backward_bi_dist[prev_token + "_" + possible_token] +
                 pseudo_count)
             denominator = 0
@@ -49,13 +49,13 @@ class TrueCaser(object):
                                                       alternativeToken] +
                                 pseudo_count)
 
-            bigram_backward_score = nominator / denominator
+            bigram_backward_score = numerator / denominator
 
         # Get Forward Score
         bigram_forward_score = 1
         if next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
-            nominator = (
+            numerator = (
                 self.forward_bi_dist[possible_token + "_" + next_token] +
                 pseudo_count)
             denominator = 0
@@ -65,13 +65,13 @@ class TrueCaser(object):
                     self.forward_bi_dist[alternativeToken + "_" + next_token] +
                     pseudo_count)
 
-            bigram_forward_score = nominator / denominator
+            bigram_forward_score = numerator / denominator
 
         # Get Trigram Score
         trigram_score = 1
         if prev_token is not None and next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
-            nominator = (self.trigram_dist[prev_token + "_" + possible_token +
+            numerator = (self.trigram_dist[prev_token + "_" + possible_token +
                                            "_" + next_token] + pseudo_count)
             denominator = 0
             for alternativeToken in self.word_casing_lookup[
@@ -80,7 +80,7 @@ class TrueCaser(object):
                     self.trigram_dist[prev_token + "_" + alternativeToken +
                                       "_" + next_token] + pseudo_count)
 
-            trigram_score = nominator / denominator
+            trigram_score = numerator / denominator
 
         result = (math.log(unigram_score) + math.log(bigram_backward_score) +
                   math.log(bigram_forward_score) + math.log(trigram_score))
