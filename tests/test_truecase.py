@@ -37,3 +37,13 @@ class TestTrueCase(unittest.TestCase):
         expected = "At the moment, I am getting ready for work!"
         result = self.tc.get_true_case(sentence)
         assert result == expected
+                
+        sentence = "Please don't ruin the apostrophe."
+        expected = "Please don't ruin the apostrophe."
+        result = self.tc.get_true_case(sentence)
+        assert result == expected
+                
+        sentence = "Testing $bug"
+        expected = "Testing $bug"
+        result = self.tc.get_true_case(sentence)
+        assert result == expected
