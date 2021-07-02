@@ -5,7 +5,7 @@ from truecase import Trainer
 
 class TestTrainer(unittest.TestCase):
     def setUp(self):
-        self.tc = Trainer.Trainer()
+        self.tc = Trainer()
 
     def test_get_casing(self):
         word = ""
