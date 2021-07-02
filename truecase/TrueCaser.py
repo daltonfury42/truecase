@@ -4,7 +4,8 @@ import pickle
 import string
 
 import nltk
-from nltk.tokenize import TweetTokenizer
+from nltk.tokenize import word_tokenize
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 
 class TrueCaser(object):
@@ -22,24 +23,24 @@ class TrueCaser(object):
             self.forward_bi_dist = pickle_dict["forward_bi_dist"]
             self.trigram_dist = pickle_dict["trigram_dist"]
             self.word_casing_lookup = pickle_dict["word_casing_lookup"]
-        self.tknzr = TweetTokenizer()
+        self.detknzr = TreebankWordDetokenizer()
 
     def get_score(self, prev_token, possible_token, next_token):
         pseudo_count = 5.0
 
         # Get Unigram Score
-        nominator = self.uni_dist[possible_token] + pseudo_count
+        numerator = self.uni_dist[possible_token] + pseudo_count
         denominator = 0
         for alternativeToken in self.word_casing_lookup[
                 possible_token.lower()]:
             denominator += self.uni_dist[alternativeToken] + pseudo_count
 
-        unigram_score = nominator / denominator
+        unigram_score = numerator / denominator
 
         # Get Backward Score
         bigram_backward_score = 1
         if prev_token is not None:
-            nominator = (
+            numerator = (
                 self.backward_bi_dist[prev_token + "_" + possible_token] +
                 pseudo_count)
             denominator = 0
@@ -49,13 +50,13 @@ class TrueCaser(object):
                                                       alternativeToken] +
                                 pseudo_count)
 
-            bigram_backward_score = nominator / denominator
+            bigram_backward_score = numerator / denominator
 
         # Get Forward Score
         bigram_forward_score = 1
         if next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
-            nominator = (
+            numerator = (
                 self.forward_bi_dist[possible_token + "_" + next_token] +
                 pseudo_count)
             denominator = 0
@@ -65,13 +66,13 @@ class TrueCaser(object):
                     self.forward_bi_dist[alternativeToken + "_" + next_token] +
                     pseudo_count)
 
-            bigram_forward_score = nominator / denominator
+            bigram_forward_score = numerator / denominator
 
         # Get Trigram Score
         trigram_score = 1
         if prev_token is not None and next_token is not None:
             next_token = next_token.lower()  # Ensure it is lower case
-            nominator = (self.trigram_dist[prev_token + "_" + possible_token +
+            numerator = (self.trigram_dist[prev_token + "_" + possible_token +
                                            "_" + next_token] + pseudo_count)
             denominator = 0
             for alternativeToken in self.word_casing_lookup[
@@ -80,7 +81,7 @@ class TrueCaser(object):
                     self.trigram_dist[prev_token + "_" + alternativeToken +
                                       "_" + next_token] + pseudo_count)
 
-            trigram_score = nominator / denominator
+            trigram_score = numerator / denominator
 
         result = (math.log(unigram_score) + math.log(bigram_backward_score) +
                   math.log(bigram_forward_score) + math.log(trigram_score))
@@ -88,7 +89,7 @@ class TrueCaser(object):
         return result
 
     def first_token_case(self, raw):
-        return f'{raw[0].upper()}{raw[1:]}'
+        return raw.capitalize()
 
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
         """ Wrapper function for handling untokenized input.
@@ -101,9 +102,9 @@ class TrueCaser(object):
     
         Returns (str): detokenized, truecased version of input sentence 
         """
-        tokens = self.tknzr.tokenize(sentence)
+        tokens = word_tokenize(sentence)
         tokens_true_case = self.get_true_case_from_tokens(tokens, out_of_vocabulary_token_option)
-        return "".join([" " + i if not i.startswith("'") and i not in string.punctuation else i for i in tokens_true_case]).strip()
+        return self.detknzr.detokenize(tokens_true_case)
         
     def get_true_case_from_tokens(self, tokens, out_of_vocabulary_token_option="title"):
         """ Returns the true case for the passed tokens.
@@ -149,16 +150,19 @@ class TrueCaser(object):
                         tokens_true_case.append(best_token)
 
                     if token_idx == 0:
-                        tokens_true_case[0] = self.first_token_case(tokens_true_case[0])
+                        tokens_true_case[0] = self.first_token_case(
+                            tokens_true_case[0])
 
                 else:  # Token out of vocabulary
                     if out_of_vocabulary_token_option == "title":
                         tokens_true_case.append(token.title())
+                    elif out_of_vocabulary_token_option == "capitalize":
+                        tokens_true_case.append(token.capitalize())
                     elif out_of_vocabulary_token_option == "lower":
                         tokens_true_case.append(token.lower())
                     else:
                         tokens_true_case.append(token)
-        
+
         return tokens_true_case
 
 

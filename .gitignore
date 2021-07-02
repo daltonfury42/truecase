@@ -78,3 +78,6 @@ fabric.properties
 
 build/
 .eggs/
+
+# virtual env
+.env/
