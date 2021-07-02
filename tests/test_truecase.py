@@ -38,8 +38,8 @@ class TestTrueCase(unittest.TestCase):
         result = self.tc.get_true_case(sentence)
         assert result == expected
                 
-        sentence = "Please don't ruin the apostrophe."
-        expected = "Please don't ruin the apostrophe."
+        sentence = "Please don't ruin this sentences."
+        expected = "Please don't ruin this sentences."
         result = self.tc.get_true_case(sentence)
         assert result == expected
                 
