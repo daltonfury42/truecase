@@ -92,16 +92,33 @@ class TrueCaser(object):
         return raw.capitalize()
 
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
-        """ Returns the true case for the passed tokens.
-
-        @param tokens: Tokens in a single sentence
-        @param outOfVocabulariyTokenOption:
+        """ Wrapper function for handling untokenized input.
+        
+        @param sentence: a sentence string to be tokenized
+        @param outOfVocabularyTokenOption:
             title: Returns out of vocabulary (OOV) tokens in 'title' format
             lower: Returns OOV tokens in lower case
             as-is: Returns OOV tokens as is
+    
+        Returns (str): detokenized, truecased version of input sentence 
         """
         tokens = word_tokenize(sentence)
-
+        tokens_true_case = self.get_true_case_from_tokens(tokens, out_of_vocabulary_token_option)
+        return self.detknzr.detokenize(tokens_true_case)
+        
+    def get_true_case_from_tokens(self, tokens, out_of_vocabulary_token_option="title"):
+        """ Returns the true case for the passed tokens.
+    
+        @param tokens: List of tokens in a single sentence
+        @param pretokenised: set to true if input is alreay tokenised (e.g. string with whitespace between tokens)
+        @param outOfVocabularyTokenOption:
+            title: Returns out of vocabulary (OOV) tokens in 'title' format
+            lower: Returns OOV tokens in lower case
+            as-is: Returns OOV tokens as is
+        
+        Returns (list[str]): truecased version of input list
+        of tokens 
+        """
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
 
@@ -146,7 +163,7 @@ class TrueCaser(object):
                     else:
                         tokens_true_case.append(token)
 
-        return self.detknzr.detokenize(tokens_true_case)
+        return tokens_true_case
 
 
 if __name__ == "__main__":

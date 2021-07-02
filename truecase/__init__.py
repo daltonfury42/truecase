@@ -1,8 +1,8 @@
 from functools import lru_cache
-
+from .Trainer import Trainer
 from .TrueCaser import TrueCaser
 
-__version__ = "0.0.13"
+__version__ = "0.0.14"
 
 
 @lru_cache(maxsize=1)
