@@ -39,12 +39,12 @@ Simple usecase:
 You can also pass an `out_of_vocabulary_token_option`, which will be used if a word is not found in the model's vocabulary
 ```python
 >>> import truecase
->>> truecase.get_true_case('my favorite music genre is hip-hop.', "capitalize")
+>>> truecase.get_true_case('my favorite music genre is hip-hop.', "title")
 'My favorite music genre is Hip-Hop.'
 ```
 `out_of_vocabulary_token_option`:
-- "capitalize" < DEFAULT
-- "title"
+- "title" < DEFAULT
+- "capitalize"
 - "lower"
 - Or, pass if your own lambda function
 
