@@ -2,6 +2,7 @@ import math
 import os
 import pickle
 import string
+from typing import Callable
 
 import nltk
 from nltk.tokenize import word_tokenize
@@ -91,6 +92,19 @@ class TrueCaser(object):
     def first_token_case(self, raw):
         return raw.capitalize()
 
+    def out_of_vocabulary_handler(self, token_og_case, out_of_vocabulary_token_option="title"):
+        if isinstance(out_of_vocabulary_token_option, Callable):
+            return out_of_vocabulary_token_option(token_og_case)
+        elif out_of_vocabulary_token_option == "title":
+            return token_og_case.title()
+        elif out_of_vocabulary_token_option == "capitalize":
+            return token_og_case.capitalize()
+        elif out_of_vocabulary_token_option == "lower":
+            return token_og_case.lower()
+        else:
+            # If value passed is invalid, use .title()
+            return token_og_case.title()
+
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
         """ Wrapper function for handling untokenized input.
         
@@ -121,7 +135,7 @@ class TrueCaser(object):
         """
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
-
+            token_og_case = token
             if token in string.punctuation or token.isdigit():
                 tokens_true_case.append(token)
             else:
@@ -154,14 +168,7 @@ class TrueCaser(object):
                             tokens_true_case[0])
 
                 else:  # Token out of vocabulary
-                    if out_of_vocabulary_token_option == "title":
-                        tokens_true_case.append(token.title())
-                    elif out_of_vocabulary_token_option == "capitalize":
-                        tokens_true_case.append(token.capitalize())
-                    elif out_of_vocabulary_token_option == "lower":
-                        tokens_true_case.append(token.lower())
-                    else:
-                        tokens_true_case.append(token)
+                    tokens_true_case.append(self.out_of_vocabulary_handler(token_og_case, out_of_vocabulary_token_option))
 
         return tokens_true_case
 

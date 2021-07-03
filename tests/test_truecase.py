@@ -47,3 +47,8 @@ class TestTrueCase(unittest.TestCase):
         expected = "Testing $bug"
         result = self.tc.get_true_case(sentence)
         assert result == expected
+
+        sentence = "i work in the nsa."
+        expected = "I work in the NSA."
+        result = self.tc.get_true_case(sentence, lambda token: token.upper())
+        assert result == expected
