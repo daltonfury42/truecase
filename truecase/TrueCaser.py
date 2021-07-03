@@ -2,6 +2,7 @@ import math
 import os
 import pickle
 import string
+from typing import Callable
 
 import nltk
 from nltk.tokenize import word_tokenize
@@ -92,7 +93,9 @@ class TrueCaser(object):
         return raw.capitalize()
 
     def out_of_vocabulary_handler(self, token, out_of_vocabulary_token_option="title"):
-        if out_of_vocabulary_token_option == "title":
+        if isinstance(out_of_vocabulary_token_option, Callable):
+            return out_of_vocabulary_token_option(token)
+        elif out_of_vocabulary_token_option == "title":
             return token.title()
         elif out_of_vocabulary_token_option == "capitalize":
             return token.capitalize()
