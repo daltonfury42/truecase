@@ -91,6 +91,17 @@ class TrueCaser(object):
     def first_token_case(self, raw):
         return raw.capitalize()
 
+    def out_of_vocabulary_handler(self, token, out_of_vocabulary_token_option="title"):
+        if out_of_vocabulary_token_option == "title":
+            return token.title()
+        elif out_of_vocabulary_token_option == "capitalize":
+            return token.capitalize()
+        elif out_of_vocabulary_token_option == "lower":
+            return token.lower()
+        else:
+            # Return original casing
+            return token
+
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
         """ Wrapper function for handling untokenized input.
         
@@ -121,7 +132,7 @@ class TrueCaser(object):
         """
         tokens_true_case = []
         for token_idx, token in enumerate(tokens):
-
+            token_og_case = token
             if token in string.punctuation or token.isdigit():
                 tokens_true_case.append(token)
             else:
@@ -154,14 +165,7 @@ class TrueCaser(object):
                             tokens_true_case[0])
 
                 else:  # Token out of vocabulary
-                    if out_of_vocabulary_token_option == "title":
-                        tokens_true_case.append(token.title())
-                    elif out_of_vocabulary_token_option == "capitalize":
-                        tokens_true_case.append(token.capitalize())
-                    elif out_of_vocabulary_token_option == "lower":
-                        tokens_true_case.append(token.lower())
-                    else:
-                        tokens_true_case.append(token)
+                    tokens_true_case.append(self.out_of_vocabulary_handler(token_og_case, out_of_vocabulary_token_option))
 
         return tokens_true_case
 
