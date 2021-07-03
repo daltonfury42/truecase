@@ -33,9 +33,26 @@ Simple usecase:
 ```python
 >>> import truecase
 >>> truecase.get_true_case('hey, what is the weather in new york?')
-'Hey, what is the weather in New York?''
+'Hey, what is the weather in New York?'
 ```
 
+You can also pass an `out_of_vocabulary_token_option`, which will be used if a word is not found in the model's vocabulary
+```python
+>>> import truecase
+>>> truecase.get_true_case('my favorite music genre is hip-hop.', "capitalize")
+'My favorite music genre is Hip-Hop.'
+```
+`out_of_vocabulary_token_option`:
+- "capitalize" < DEFAULT
+- "title"
+- "lower"
+- Or, pass if your own lambda function
+
+```python
+>>> import truecase
+>>> truecase.get_true_case('i work in the nsa.', lambda token: token.upper())
+'I work in the NSA.'
+```
 ## Training your own model
 
 TODO. For now refer to Trainer.py
