@@ -36,7 +36,7 @@ Simple usecase:
 'Hey, what is the weather in New York?'
 ```
 
-You can also pass an `out_of_vocabulary_token_option`, which will be used if a word is not found in the model's vocabulary
+You can also pass an `out_of_vocabulary_token_option`, which will be used if a word is not found in the model's vocabulary:
 ```python
 >>> import truecase
 >>> truecase.get_true_case('my favorite music genre is hip-hop.', "title")
@@ -46,8 +46,11 @@ You can also pass an `out_of_vocabulary_token_option`, which will be used if a w
 - "title" < DEFAULT
 - "capitalize"
 - "lower"
-- Or, pass if your own lambda function
+- Or, pass if your own lambda function (takes the token with original casing as a single parameter)
 
+*If an invalid option is passed, title is used*
+
+Lambda function example:
 ```python
 >>> import truecase
 >>> truecase.get_true_case('i work in the nsa.', lambda token: token.upper())

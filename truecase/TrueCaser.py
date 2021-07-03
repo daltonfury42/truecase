@@ -92,18 +92,18 @@ class TrueCaser(object):
     def first_token_case(self, raw):
         return raw.capitalize()
 
-    def out_of_vocabulary_handler(self, token, out_of_vocabulary_token_option="title"):
+    def out_of_vocabulary_handler(self, token_og_case, out_of_vocabulary_token_option="title"):
         if isinstance(out_of_vocabulary_token_option, Callable):
-            return out_of_vocabulary_token_option(token)
+            return out_of_vocabulary_token_option(token_og_case)
         elif out_of_vocabulary_token_option == "title":
-            return token.title()
+            return token_og_case.title()
         elif out_of_vocabulary_token_option == "capitalize":
-            return token.capitalize()
+            return token_og_case.capitalize()
         elif out_of_vocabulary_token_option == "lower":
-            return token.lower()
+            return token_og_case.lower()
         else:
-            # Return original casing
-            return token
+            # If value passed is invalid, use .title()
+            return token_og_case.title()
 
     def get_true_case(self, sentence, out_of_vocabulary_token_option="title"):
         """ Wrapper function for handling untokenized input.
