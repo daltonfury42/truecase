@@ -6,8 +6,8 @@ __version__ = "0.0.14"
 
 
 @lru_cache(maxsize=1)
-def get_truecaser():
-    return TrueCaser()
+def get_truecaser(dist_file_path=None):
+    return TrueCaser(dist_file_path)
 
 
 def get_true_case(sentence, out_of_vocabulary_token_option="title"):
